@@ -1,0 +1,7 @@
+{% extends "subreddits/subreddit_base.html" %}
+
+{% block content %}
+    {% for post in feed %}
+        {% include "posts/widgets/post_promo.html" with post=post%}
+    {% endfor %}
+{% endblock %}

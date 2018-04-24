@@ -1,0 +1,12 @@
+{% load comm_tags %}
+
+<ul>
+    <li>
+        {{ comment.id }} {{ comment.author }} {{ comment.created }} score:{{ comment.score }}
+        <br>
+        {{ comment.text }}
+        {% for reply in comment.replies|all %}
+            {% include "comments/widgets/comment.html" with comment=reply %}
+        {% endfor %}
+    </li>
+</ul>

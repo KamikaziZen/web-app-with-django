@@ -1,0 +1,9 @@
+{% extends "core/base.html" %}
+
+{% block title %} Subreddits {% endblock %}
+
+{% block content %}
+    {%  for subreddit in subreddits %}
+        {% include "subreddits/widgets/subreddit_promo.html" with subreddit=subreddit %}
+    {% endfor %}
+{% endblock %}

@@ -37,8 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig'
+    'core.apps.CoreConfig',
+    'categories.apps.CategoriesConfig',
+    'subreddits.apps.SubredditsConfig',
+    'posts.apps.PostsConfig',
+    'comments.apps.CommentsConfig'
 ]
+
+AUTH_USER_MODEL = 'core.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +61,9 @@ ROOT_URLCONF = 'dumbproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['posts/templates/',
+                 'subreddits/templates/',
+                 'comments/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

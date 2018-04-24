@@ -1,0 +1,5 @@
+{% load sub_tags %}
+<a href="{% url "subreddit" sub_url=subreddit.url%}">
+    <h3>{{ subreddit|full_url }}: {{ subreddit.name }}</h3> </a>
+{{ subreddit.about }}
+<br>

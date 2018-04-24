@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <p align="right">
+            <a href="{% url "subreddits_list" %}">subreddits</a>
+        </p>
+        {% block header %}
+            <a href="{% url "mainpage" %}">
+                <h1>Riddit</h1>
+            </a>
+        {% endblock %}
+        {%  block login %}
+            <p align="right">
+                <a href="{% url "login" %}">Log in or sign up</a>
+            </p>
+        {% endblock %}
+    </head>
+
+    <body>
+        <h2>
+            {% block title %}Main Page{% endblock %}
+        </h2>
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

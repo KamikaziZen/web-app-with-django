@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% block login %}{% endblock %}
+{% block title %}Log in or sign up{% endblock %}
+{% block content %}
+    <div style="float:left; width:50%;">
+        <h4>CREATE A NEW ACCOUNT</h4>
+        <form action="" method="post">
+{#            <input type="text" placeholder="choose a username" name="username"><br>#}
+{#            <input type="password" placeholder="password" name="password1"><br>#}
+{#            <input type="password" placeholder="verify password" name="password2"><br>#}
+{#            <input type="email" placeholder="email" name="email"><br>#}
+{#            <input type="checkbox" id="remember_me" value="remember">#}
+{#            <label for="remember_me">remember me</label><br>#}
+{#            <input type="checkbox" id="email_me_updates" value="email_updates">#}
+{#            <label for="email_me_updates">email me updates</label><br>#}
+{#            <input type="submit" value="SIGN UP">#}
+            {{ signup_form.username }}<br>
+            {{ signup_form.password }}<br>
+            {{ signup_form.email }}<br>
+            {{ signup_form.remember_me }}{{ signup_form.remember_me.label }}<br>
+            {{ signup_form.email_me }}{{ signup_form.email_me.label }}<br>
+            <input type="submit" value="SIGN UP">
+
+        </form>
+    </div>
+    <div style="float:right; width:50%;">
+        <h4>LOG IN</h4>
+        <form action="" method="post">
+{#            <input type="text" placeholder="username" name="username"><br>#}
+{#            <input type="password" placeholder="password" name="password1"><br>#}
+{#            <input type="checkbox" id="remember_me" value="remember">#}
+{#            <label for="remember_me">remember me</label><br>#}
+            {{ login_form.username }}<br>
+            {{ login_form.password }}<br>
+            {{ signup_form.remember_me }}{{ signup_form.remember_me.label }}<br>
+            <input type="submit" value="LOG IN">
+
+        </form>
+    </div>
+{% endblock %}
