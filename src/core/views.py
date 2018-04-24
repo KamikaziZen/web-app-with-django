@@ -1,19 +1,25 @@
 from django.shortcuts import render, HttpResponse
-from django import forms
+from .forms import SignupForm, LoginForm
+from .models import User
 
 
-class SignupForm(forms.Form):
-    username = forms.CharField(max_length=100)
-    password = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    remember_me = forms.BooleanField(label='remember me')
-    email_me = forms.BooleanField(label='email me updates')
+def get_user_data(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            u = User()
+            u.username = form.username
+            u.password = form.password
+            u.email = form.email
+            u.save()
+            return render(request, 'core/main.html')
 
-
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=100)
-    password = forms.CharField(max_length=100)
-    remember_me = forms.BooleanField(label='remember me')
+    else:
+        context = {
+            'signup_form' : SignupForm(),
+            'login_form' : LoginForm(),
+        }
+        return render(request, 'core/login.html', context)
 
 
 def index(request):
