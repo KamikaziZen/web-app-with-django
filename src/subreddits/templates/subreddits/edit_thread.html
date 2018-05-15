@@ -1,0 +1,21 @@
+{% extends "subreddits/subreddit_base.html" %}
+
+{% block headline %}{% endblock %}
+
+{% block title %}
+    Edit
+{% endblock %}
+
+{% block content %}
+    <form action="" method="POST">
+    {% csrf_token %}
+{#        {{ form }}#}
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="Title" name="title" value="{{ form.title.value }}">
+    </div>
+    <div class="form-group">
+        <textarea rows="3" class="form-control" placeholder="" name="text">{{ form.text.value }}</textarea>
+    </div>
+    <input class="btn btn-outline-success float-sm-none float-md-right" type="submit" value="SAVE" name="save_edit">
+    </form>
+{% endblock %}

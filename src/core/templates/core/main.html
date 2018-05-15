@@ -1,6 +1,17 @@
 {% extends "core/base.html" %}
 
+{% load core_tags %}
+
+{% block title %}
+Welcome
+{% endblock %}
 
 {% block content %}
-
+    {% if user_subscriptions is not None %}
+        {% for user_subscription in user_subscriptions %}
+            {% for post in user_subscription|get_posts %}
+                {% include "posts/widgets/post_promo.html" with post=post %}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
 {% endblock %}

@@ -1,15 +1,62 @@
 {% extends 'subreddits/subreddit_base.html' %}
 {% load comm_tags %}
 
+{% block headline %}
+    {{ post.subreddit.name }}
+{% endblock %}
+
+{% block title %}
+    <a href="{% url "subreddit" sub_url=sub_url %}">
+        Return back to {{ sub_url }}
+    </a>
+{% endblock %}
+
 {% block content %}
+
+    <!-- POST AUTHOR-TITLE -->
     <div>
-        <form method="get">
+        <h3>{{ post.title }}</h3>
+        <div class="text-muted small mb-4">by {{ post.author }}</div>
+    </div>
+
+    <!-- POST TEXT -->
+    <div class="PostSection p-2 bg-light border">
+        {{ post.text }}
+    </div>
+
+    <!-- EDIT -->
+    {% if post.author == user %}
+        <a class="btn btn-light btn-sm" href="{% url "edit_thread" sub_url=post.subreddit.url post_id=post.id %}">
+            edit
+        </a>
+    {% endif %}
+    <br><br>
+
+    <!-- SORT FORM -->
+    <div>
+        <form action="" method="get">
             sorted by:
-            {{ comments_form }}
-            <button>Sort</button>
+            {{ comments_sort_form }}
+            <button class="btn btn-secondary btn-sm">Sort</button>
         </form>
     </div>
-    {%  for comment in comments|high_level %}
-        {% include "comments/widgets/comment.html" with comment=comment %}
-    {% endfor %}
+    <br><br>
+
+    <!-- COMMENTS -->
+{#    {% include "comments/comments_contents.html" with comments=comments %}#}
+    <div class="CommentsSection" data-url="{% url "comments_contents" sub_url=post.subreddit.url post_id=post.id %}"></div>
+
+    <!-- LEAVE A COMMENT FORM -->
+    <div>
+        {% if user.is_authenticated %}
+{#            <div class="autoload" data-url="{% url "create_new_comment" sub_url=post.subreddit.url post_id=post.id %}"></div>#}
+            <form action="" method="POST" class="LeaveCommentForm" data-url="{% url "create_new_comment" sub_url=post.subreddit.url post_id=post.id %}">
+            </form>
+        {% else %}
+            <div class="mb-5 mt-3">
+                <a  href="{% url "login" %}?next={{ request.path }}">Log in </a>to live a comment
+            </div>
+        {% endif %}
+    </div>
+
 {% endblock %}

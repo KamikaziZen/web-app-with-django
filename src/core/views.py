@@ -1,39 +1,53 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from .forms import SignupForm, LoginForm
-from .models import User
+from subreddits.models import Subreddit
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+import random
 
 
-def get_user_data(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            u = User()
-            u.username = form.username
-            u.password = form.password
-            u.email = form.email
-            u.save()
-            return render(request, 'core/main.html')
-
-    else:
-        context = {
-            'signup_form' : SignupForm(),
-            'login_form' : LoginForm(),
-        }
+def login_signup(request):
+    context = {
+        'signup_form': SignupForm(),
+        'login_form': LoginForm(),
+    }
+    if request.method == 'GET':
         return render(request, 'core/login.html', context)
+    if request.method == 'POST':
+        if 'sign_up' in request.POST:
+            form = SignupForm(request.POST)
+            context['signup_form'] = form
+        elif 'log_in' in request.POST:
+            form = LoginForm(request.POST)
+            context['login_form'] = form
+        else:
+            return render(request, 'core/login.html', context)
+        if form.is_valid(request):
+            next_page = request.GET['next']
+            # return redirect('mainpage')
+            return HttpResponseRedirect(next_page)
+        else:
+            return render(request, 'core/login.html', context)
+
+
+@login_required
+def logout_view(request):
+
+    previous_page = request.GET['previous']
+    logout(request)
+    return render(request, 'core/logout.html', {'previous_page': previous_page})
 
 
 def index(request):
 
-    return render(request, 'core/main.html')
-
-
-def login(request):
-
-    signup = SignupForm(request.POST)
-    login = LoginForm(request.POST)
+    subscriptions = None
+    if request.user.is_authenticated:
+        subscriptions = list(request.user.subscriptions.all())
+    subreddits = list(Subreddit.objects.all())
+    subreddits_display = random.sample(subreddits, 10)
     context = {
-        'signup_form' : signup,
-        'login_form' : login,
+        'subreddits_display': subreddits_display,
+        'user_subscriptions': subscriptions,
     }
-    return render(request, 'core/login.html', context)
+    return render(request, 'core/main.html', context)
 

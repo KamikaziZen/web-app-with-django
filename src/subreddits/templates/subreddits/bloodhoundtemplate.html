@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    $(document).ready(
+        function() {
+
+            var sub_arr = "{{ subreddits_urls }}";
+            var len = sub_arr.length;
+            sub_arr = sub_arr.substr(6,len-12)
+            sub_arr = sub_arr.split('&#39;, &#39;')
+
+            var subs = new Bloodhound({
+              datumTokenizer: Bloodhound.tokenizers.whitespace,
+              queryTokenizer: Bloodhound.tokenizers.whitespace,
+              local: sub_arr
+            });
+
+            $('#bloodhound .typeahead').typeahead({
+              hint: true,
+              highlight: true,
+              minLength: 1
+            },
+            {
+              name: 'subs',
+              source: subs
+            });
+        })
+</script>

@@ -1,9 +1,47 @@
 {% extends "core/base.html" %}
 
-{% block title %} Subreddits {% endblock %}
+{% block headline %}Subreddits{% endblock %}
+
+{% block title %}
+    {% if user.is_superuser %}
+        <div class="container">
+            <button class="btn btn-outline-secondary btn-lg mb-4" data-toggle="modal" data-target="#myModal">
+                Create new Subreddit
+            </button>
+
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">New Subreddit</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form action="" method="post" class="autoload CreateSubredditForm" data-url="{% url "create_new_subreddit" %}">
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
 
 {% block content %}
-    {%  for subreddit in subreddits %}
-        {% include "subreddits/widgets/subreddit_promo.html" with subreddit=subreddit %}
-    {% endfor %}
+    <div class="SubredditsListSection autoload" data-url="{% url "SubredditListContents" %}">
+    </div>
+{#    {%  for subreddit in subreddits %}#}
+{#        <div class="row">#}
+{#            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8  ">#}
+{#                {% include "subreddits/widgets/subreddit_promo.html" with subreddit=subreddit %}#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endfor %}#}
 {% endblock %}

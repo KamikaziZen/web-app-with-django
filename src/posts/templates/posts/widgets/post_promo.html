@@ -1,6 +1,43 @@
-<a href="{% url "comments_by_id" post_id=post.id %}">
-    <h3>
-        {{ post.title }}
-    </h3>
-</a>
-<br>
+{% load post_tags %}
+
+<table class="table bg-light">
+    <thead></thead>
+    <tbody>
+        <tr>
+            <!-- SCORE -->
+            <td class="col-2 align-middle text-center inline">
+
+                {% if user.is_authenticated %}
+{#                    <div class="autoload" data-url="{% url "PostUpButton" sub_url=post.subreddit.url post_id=post.id %}">#}
+{#                    </div>#}
+                    <form action="" method="post" class='autoload PostScoreForm' data-url="{% url "PostUpButton" sub_url=post.subreddit.url post_id=post.id %}"></form>
+                {% endif %}
+                <div class="autoload ScoreSection" data-url="{% url "simplePostScore" sub_url=post.subreddit.url post_id=post.id %}"></div>
+            </td>
+
+            <!-- POST -->
+            <td class="col-10">
+                <!-- TITLE -->
+                <a href="{% url "comments" post_id=post.id sub_url=post.subreddit.url %}">
+                    {{ post.title }}
+                </a>
+
+                <!-- CREATED-AUTHOR -->
+                <div class="text-muted small">{{ post.created }} by {{ post.author }}</div>
+
+                <!-- TEXT -->
+                <div class="d-block bg-light">{{ post.text }}</div>
+
+                <!-- COMMENTS -->
+                <div class="text-muted small">comments: {{ post|num_comments }}</div>
+
+                <!-- EDIT -->
+                {% if post.author == user or user.is_superuser %}
+                    <a class="btn btn-light btn-sm" href="{% url "edit_thread" sub_url=post.subreddit.url post_id=post.id %}">
+                        edit
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -24,8 +24,8 @@ import comments.views as commviews
 urlpatterns = [
     path('', coreviews.index, name="mainpage"),
     path('admin/', admin.site.urls),
-    path('login/', coreviews.login, name='login'),
+    path('login/', coreviews.login_signup, name='login'),
+    path('logout/', coreviews.logout_view, name='logout'),
     re_path(r'^subreddits/', subviews.subreddits_list, name="subreddits_list"),
     re_path(r'^r/', include('subreddits.urls')),
-    re_path(r'^comments/', include('comments.urls'))
 ]

@@ -1,0 +1,24 @@
+{#{% extends "core/base.html" %}#}
+{##}
+{#{% block headline %}{% endblock %}#}
+{##}
+{#{% block title %}#}
+{#    New subreddit#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#    <form action="" method="post">#}
+        {% csrf_token %}
+{#        {{ form }}#}
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Name" name="name">
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" rows="3" placeholder="About" name="about"></textarea>
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Path" name="url">
+        </div>
+        <input class="btn btn-outline-success float-sm-none float-md-right" type="submit" value="Create">
+{#    </form>#}
+{#{% endblock %}#}

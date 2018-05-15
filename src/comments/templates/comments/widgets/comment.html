@@ -1,11 +1,12 @@
-{% load comm_tags %}
-
-<ul>
-    <li>
-        {{ comment.id }} {{ comment.author }} {{ comment.created }} score:{{ comment.score }}
-        <br>
-        {{ comment.text }}
-        {% for reply in comment.replies|all %}
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="text-muted mb-1">
+            {{ comment.author }} on {{ comment.created }} score:{{ comment.score }}
+        </div>
+        <div class="bg-light mb-1">
+            {{ comment.text }}
+        </div>
+        {% for reply in comment.replies.all %}
             {% include "comments/widgets/comment.html" with comment=reply %}
         {% endfor %}
     </li>

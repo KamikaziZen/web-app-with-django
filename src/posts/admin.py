@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post, PostVote
 
 
 @admin.register(Post)
@@ -11,3 +11,9 @@ class PostAdmin(admin.ModelAdmin):
 
     def num_comments(self, obj):
         return len([c.author.username for c in obj.comments.all()])
+
+
+@admin.register(PostVote)
+class PostVoteAdmin(admin.ModelAdmin):
+
+    list_display = 'voter', 'post', 'up',

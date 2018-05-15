@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+
+{% block login %}{% endblock %}
+{% block headline %}{% endblock %}
+{% block title %}
+    <div class="text-info">
+        You are logged out
+    </div>
+{% endblock %}
+
+{% block content %}
+    <a href="{{ previous_page }}">
+        Return to browsing
+    </a>
+{% endblock %}

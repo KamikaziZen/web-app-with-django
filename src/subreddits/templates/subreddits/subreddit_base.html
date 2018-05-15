@@ -1,3 +1,12 @@
 {% extends 'core/base.html' %}
 
-{% block title %} {{ subreddit.name }} {% endblock %}
+{% block headline %}{{ subreddit.name }}{% endblock %}
+
+{% block title %}
+    <!-- CREATE POST BUTTON -->
+    <div class="container">
+        <a class="btn btn-outline-secondary btn-lg mb-4" href={% url "create_new_thread" sub_url=subreddit.url %}>
+            Create new Post
+        </a>
+    </div>
+{% endblock %}

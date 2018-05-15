@@ -1,0 +1,5 @@
+{% load comm_tags %}
+
+{%  for comment in comments|high_level %}
+    {% include "comments/widgets/comment.html" with comment=comment %}
+{% endfor %}

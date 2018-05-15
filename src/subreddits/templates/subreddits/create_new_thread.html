@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+
+{% load static %}
+
+{% block headline %}{% endblock %}
+
+{% block title %}
+    New post
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" class="CreatePostForm">
+        {% csrf_token %}
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
+        <div class="form-group">
+            <input class="form-control" type="text" placeholder="Title" name="title">
+        </div>
+        <div class="form-group">
+            <textarea rows="3" class="form-control" placeholder="Write your text here" name="text"></textarea>
+        </div>
+        <div id="bloodhound" class="form-group">
+          <input class="typeahead form-control" type="text" placeholder="Subreddit" name="subreddit_url">
+        </div>
+        <input class="btn btn-outline-success float-sm-none float-md-right" type="submit" value="POST">
+    </form>
+
+{#    {{ subreddits_urls }}#}
+    <script src="{% static 'core/jquery-3.3.1.js' %}"></script>
+    {% include "subreddits/bloodhoundtemplate.html" %}
+{% endblock %}

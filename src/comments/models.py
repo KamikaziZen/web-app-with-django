@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from posts.models import Post
-from django.utils import timezone
 
 
 class Comment(models.Model):

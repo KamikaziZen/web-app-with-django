@@ -26,5 +26,5 @@ class Post(models.Model):
 class PostVote(models.Model):
 
     voter = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='+')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='+')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='+', db_index=True)
     up = models.NullBooleanField()

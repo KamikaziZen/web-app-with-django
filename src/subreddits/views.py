@@ -1,10 +1,52 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse
 from .models import Subreddit
+from django.views.generic import CreateView, UpdateView
+from django.core.exceptions import PermissionDenied
+
+
+class CreateSubreddit(CreateView):
+
+    model = Subreddit
+    fields = "name", "url", "about",
+    template_name = "subreddits/create_new_subreddit.html"
+    sub_url = ''
+
+    def form_valid(self, form):
+        self.sub_url = form.instance.url
+        if self.request.user.id == 1:
+            return super(CreateSubreddit, self).form_valid(form)
+        else:
+            raise PermissionDenied
+
+    def get_success_url(self):
+        return reverse("subreddit", kwargs={'sub_url': self.sub_url})
+
+
+class UpdateSubreddit(UpdateView):
+
+    model = Subreddit
+    fields = "name", "url", "about",
+    template_name = "subreddits/edit_subreddit.html"
+    sub_url = ''
+
+    def get_object(self, queryset=None):
+        return Subreddit.objects.get(url=self.kwargs['sub_url'])
+
+    def form_valid(self, form):
+        self.sub_url = form.instance.url
+        if self.request.user.id == 1:
+            return super(UpdateSubreddit, self).form_valid(form)
+        else:
+            raise PermissionDenied
+
+    def get_success_url(self):
+        return reverse("subreddit", kwargs={'sub_url': self.sub_url})
 
 
 def r(request):
 
     return redirect('subreddits_list')
+
 
 def subreddits_list(request):
 
@@ -22,3 +64,8 @@ def subreddit(request, sub_url):
         'feed' : subreddit.feed.all(),
     }
     return render(request, "subreddits/subreddit.html", context)
+
+def subredditsListSectionView(request):
+
+    subreddits = Subreddit.objects.all()
+    return render(request, "subreddits/widgets/subreddit_promo.html", {'subreddits': subreddits})

@@ -1,0 +1,13 @@
+{#<form action="" class='LeaveCommentForm' method="post">#}
+{#    {% csrf_token %}#}
+{#    <div class="form-group">#}
+{#        <textarea rows="3" class="form-control" placeholder="Write your comment here" name="text"></textarea>#}
+{#    </div>#}
+{#    <input class="btn btn-outline-secondary float-sm-none float-md-right mb-4" type="submit" value="LEAVE COMMENT">#}
+{#</form>#}
+{% csrf_token %}
+<div class="form-group">
+    <textarea rows="3" class="form-control" placeholder="Write your comment here" name="text"></textarea>
+</div>
+<input class="btn btn-outline-secondary float-sm-none float-md-right mb-4" type="submit" value="LEAVE COMMENT">
+

@@ -1,5 +1,44 @@
 {% load sub_tags %}
-<a href="{% url "subreddit" sub_url=subreddit.url%}">
-    <h3>{{ subreddit|full_url }}: {{ subreddit.name }}</h3> </a>
-{{ subreddit.about }}
-<br>
+
+
+{%  for subreddit in subreddits %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8  ">
+
+            <!-- TITLE -->
+            <div>
+                <a class="btn" href="{% url "subreddit" sub_url=subreddit.url %}">
+                    <h3>{{ subreddit|full_url }}: {{ subreddit.name }}</h3>
+                </a>
+            </div>
+
+            <!-- ABOUT -->
+            <div class="p-2 bg-light border">
+                {{ subreddit.about }}
+            </div>
+
+            <div class="text-muted small">
+                subscribers: {{ subreddit|num_subscribers }} posts: {{ subreddit|num_posts }}
+            </div>
+
+            {#<!-- SUBSCRIBE/UNSUBSCRIBE -->#}
+            {#{% if user.is_authenticated %}#}
+            {#    {% if subreddit in user|get_subscriptions %}#}
+            {#        <button class="btn btn-info btn-sm">Unsubscribe</button>#}
+            {#    {% else %}#}
+            {#        <button class="btn btn-success btn-sm">Subscribe</button>#}
+            {#    {% endif %}#}
+            {#{% endif %}#}
+
+            <!-- EDIT -->
+            {% if user.is_superuser %}
+                <a class="btn btn-light btn-sm" href="{% url "edit_subreddit" sub_url=subreddit.url %}">
+                    edit
+                </a>
+            {% endif %}
+
+            <div class="mb-4"></div>
+
+        </div>
+    </div>
+{% endfor %}
