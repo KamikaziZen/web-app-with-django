@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpR
 from .models import Subreddit
 from django.views.generic import CreateView, UpdateView
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 
 
 class CreateSubreddit(CreateView):
@@ -58,7 +59,9 @@ def subreddits_list(request):
 
 def subreddit(request, sub_url):
 
-    subreddit = get_object_or_404(Subreddit, url=sub_url)
+    subreddit = get_object_or_404(Subreddit.objects.prefetch_related('feed__comments','feed__author'),
+                                  url=sub_url)
+
     context = {
         'subreddit' : subreddit,
         'feed' : subreddit.feed.all(),
@@ -67,5 +70,6 @@ def subreddit(request, sub_url):
 
 def subredditsListSectionView(request):
 
-    subreddits = Subreddit.objects.all()
-    return render(request, "subreddits/widgets/subreddit_promo.html", {'subreddits': subreddits})
+    subreddits = Subreddit.objects.annotate(num_subscribers=Count('subscribers'),
+                                                  num_posts=Count('feed'))
+    return render(request, "subreddits/widgets/subreddit_promo.html", {'subreddits': subreddits.all()})

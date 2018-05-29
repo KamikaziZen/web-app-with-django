@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     'categories.apps.CategoriesConfig',
     'subreddits.apps.SubredditsConfig',
     'posts.apps.PostsConfig',
-    'comments.apps.CommentsConfig'
+    'comments.apps.CommentsConfig',
+    'debug_toolbar',
 ]
 
 AUTH_USER_MODEL = 'core.User'
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+INTERNAL_IPS='127.0.0.1'
 
 ROOT_URLCONF = 'dumbproject.urls'
 
@@ -71,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.navbar_subs',
             ],
         },
     },
@@ -89,6 +94,14 @@ DATABASES = {
         'USER': 'dumbuser',
         'PASSWORD': 'dumb',
         'HOST': 'localhost',
+    }
+}
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
 

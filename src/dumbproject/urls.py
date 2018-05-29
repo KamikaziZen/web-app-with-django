@@ -17,8 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from core import views as coreviews
 from subreddits import views as subviews
-from posts import views as postviews
-import comments.views as commviews
+from django.conf import settings
 
 
 urlpatterns = [
@@ -29,3 +28,10 @@ urlpatterns = [
     re_path(r'^subreddits/', subviews.subreddits_list, name="subreddits_list"),
     re_path(r'^r/', include('subreddits.urls')),
 ]
+
+if settings.DEBUG:
+   import debug_toolbar
+   urlpatterns += [
+        re_path(r'^__debug__/', include(debug_toolbar.urls)),
+   ]
+

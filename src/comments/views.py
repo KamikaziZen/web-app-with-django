@@ -9,8 +9,8 @@ from .forms import LeaveCommentForm
 
 def comments(request, sub_url, post_id):
 
-    post = get_object_or_404(Post, id=post_id)
-    comments = post.comments.all()
+    post = get_object_or_404(Post.objects.select_related('subreddit', 'author'), id=post_id)
+    comments = post.comments.select_related('author').prefetch_related('replies').all()
     comments_sort_form = CommentsSortForm()
     if request.method == "GET":
         comments_sort_form = CommentsSortForm(request.GET)

@@ -31,9 +31,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "subreddits_list" %}">All Subreddits</a>
                     </li>
-                    {% for subreddit_display in subreddits_display %}
+                    {% for nav_sub in navbar_subreddits %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url "subreddit" sub_url=subreddit_display.url %}">{{ subreddit_display.name }}</a>
+                            <a class="nav-link" href="{% url "subreddit" sub_url=nav_sub.url %}">{{ nav_sub.name }}</a>
                         </li>
                     {% endfor %}
                 </ul>

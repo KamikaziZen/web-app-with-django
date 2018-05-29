@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.views.generic import CreateView
 from .forms import PostVoteForm
 from django.contrib.auth.decorators import login_required
+from django.db import models
 
 
 class PostEdit(UpdateView):
@@ -68,8 +69,9 @@ def create_new_thread(request, sub_url):
 
 def simplePostScore(request, sub_url, post_id):
 
-    postvotes = list(PostVote.objects.filter(post_id=post_id))
-    return HttpResponse('<span id=post_score>' + str(len(postvotes)) + '</span>')
+    post = Post.objects.get(id=post_id)
+    # postvotes = list(PostVote.objects.filter(post_id=post_id))
+    return HttpResponse('<span id=post_score>' + str(post.score) + '</span>')
 
 
 # class PostVoteView(CreateView):
@@ -104,6 +106,7 @@ def postVoteView(request, sub_url, post_id):
                 postvote.voter = request.user
                 postvote.up = True
                 postvote.save()
+                Post.objects.filter(id=post_id).update(score=models.F('score')+1)
                 return redirect("subreddit", sub_url=sub_url)
             else:
                 raise PermissionDenied
@@ -114,4 +117,5 @@ def postVoteView(request, sub_url, post_id):
 def postListView(request, sub_url):
 
     feed = Subreddit.objects.get(url=sub_url).feed.all()
+    # feed = Subreddit.objects.get(url=sub_url).feed.select_related('comments').all()
     return render(request, "posts/widgets/post_promo.html", {'feed': feed})
