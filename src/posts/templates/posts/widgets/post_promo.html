@@ -30,7 +30,7 @@
                 <div class="text-muted small">comments: {{ post.comments.count }}</div>
 
                 <!-- EDIT -->
-                {% if post.author.id == user.id or user.id == 1 %}
+                {% if post.author_id == user.id or user.id == 1 %}
                     <a class="btn btn-light btn-sm" href="{% url "edit_thread" sub_url=post.subreddit.url post_id=post.id %}">
                         edit
                     </a>

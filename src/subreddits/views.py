@@ -59,12 +59,14 @@ def subreddits_list(request):
 
 def subreddit(request, sub_url):
 
-    subreddit = get_object_or_404(Subreddit.objects.prefetch_related('feed__comments','feed__author'),
-                                  url=sub_url)
+    # subreddit = get_object_or_404(Subreddit.objects.prefetch_related('feed__comments','feed__author'),
+    #                               url=sub_url)
+    subreddit = get_object_or_404(Subreddit, url=sub_url)
+    feed = subreddit.feed.all().select_related('author').prefetch_related('comments')
 
     context = {
         'subreddit' : subreddit,
-        'feed' : subreddit.feed.all(),
+        'feed' : feed,
     }
     return render(request, "subreddits/subreddit.html", context)
 
