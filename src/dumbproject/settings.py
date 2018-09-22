@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
-    'categories.apps.CategoriesConfig',
     'subreddits.apps.SubredditsConfig',
     'posts.apps.PostsConfig',
     'comments.apps.CommentsConfig',
@@ -92,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'dumbproject',
         'USER': 'dumbuser',
-        'PASSWORD': 'dumb',
+        'PASSWORD': 'dumbpassword',
         'HOST': 'localhost',
     }
 }
