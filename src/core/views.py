@@ -44,7 +44,7 @@ def index(request):
     if request.user.is_authenticated:
         subscriptions = list(request.user.subscriptions.prefetch_related('feed', 'feed__author', 'feed__comments').all())
     subreddits = list(Subreddit.objects.all())
-    subreddits_display = random.sample(subreddits, 15)
+    subreddits_display = random.sample(subreddits, min(len(subreddits), 20))
     context = {
         'subreddits_display': subreddits_display,
         'user_subscriptions': subscriptions,

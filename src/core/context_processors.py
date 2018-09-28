@@ -12,5 +12,5 @@ def navbar_subs(request):
     if sample_subreddits is None:
         sample_subreddits = list(Subreddit.objects.all())
         cache.set('sample_subreddits', sample_subreddits, 3)
-    navbar_subreddits = random.sample(sample_subreddits, 20)
+    navbar_subreddits = random.sample(sample_subreddits, min(len(sample_subreddits), 20))
     return {'navbar_subreddits' : navbar_subreddits}
