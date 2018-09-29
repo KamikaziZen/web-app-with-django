@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from core import views as coreviews
 from subreddits import views as subviews
 from django.conf import settings
+from jsonrpc import jsonrpc_site
 
 
 urlpatterns = [
@@ -27,6 +28,7 @@ urlpatterns = [
     path('logout/', coreviews.logout_view, name='logout'),
     re_path(r'^subreddits/', subviews.subreddits_list, name="subreddits_list"),
     re_path(r'^r/', include('subreddits.urls')),
+    re_path(r'^api/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),
 ]
 
 if settings.DEBUG:

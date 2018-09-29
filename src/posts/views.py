@@ -8,6 +8,8 @@ from django.views.generic import CreateView
 from .forms import PostVoteForm
 from django.contrib.auth.decorators import login_required
 from django.db import models
+from jsonrpc import jsonrpc_method
+from core.models import User
 
 
 class PostEdit(UpdateView):
@@ -50,6 +52,24 @@ def create_new_thread(request, sub_url):
             return redirect("subreddit", sub_url=data['subreddit_url'])
         else:
             return render(request, "subreddits/create_new_thread.html", {"form": form, "subreddits_urls": subreddits_urls})
+
+
+@jsonrpc_method('posts.api_create_post', authenticated=True)
+def api_create_post(request, **kwargs):
+
+    # if not request.user.is_authenticated:
+    #     raise PermissionDenied("Only authorised users can create new posts")
+    form = PostForm(kwargs)
+    if form.is_valid():
+        post = Post()
+        post.title = form.cleaned_data['title']
+        post.text = form.cleaned_data['text']
+        post.subreddit = Subreddit.objects.get(url=form.cleaned_data['subreddit_url'])
+        # post.author = request.user
+        post.author = User.objects.get(pk=1)
+        post.save()
+        return "Post {} in subreddit /r/{} has been successfully created"\
+            .format(form.cleaned_data['title'], form.cleaned_data['subreddit_url'])
 
 
 # def edit_thread(request, sub_url, post_id):

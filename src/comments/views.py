@@ -1,10 +1,14 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from posts.models import Post
+from subreddits.models import Subreddit
 from .models import Comment
 import urllib.parse
-from .forms import CommentsSortForm, LeaveCommentForm
+from .forms import CommentsSortForm, LeaveCommentForm, LeaveCommentApiForm
 from django.views.generic import CreateView
-from .forms import LeaveCommentForm
+from jsonrpc import jsonrpc_method
+import json
+from django.core.serializers import serialize
+from core.models import User
 
 
 def comments(request, sub_url, post_id):
@@ -39,6 +43,30 @@ def comments(request, sub_url, post_id):
     return render(request, "comments/comments.html", context)
 
 
+@jsonrpc_method('comments.api_show_comments', authenticated=True)
+def api_show_comments(request, **kwargs):
+
+    sub_url = kwargs.get('subreddit_url', None)
+    if not sub_url:
+        raise ValueError("Error in params: specify subreddit_url")
+    title = kwargs.get('title', None)
+    if not title:
+        raise ValueError("Error in params: specify post title")
+    subreddit = Subreddit.objects.get(url=sub_url)
+    if not subreddit:
+        raise ValueError("There is no subreddit with such url")
+    posts = Post.objects.filter(subreddit=subreddit, title=title).prefetch_related('comments')
+    context = {}
+    for idx, post in enumerate(posts):
+        context[idx] = {
+            "title" : post.title,
+            "text" : post.text,
+            "author" : post.author.username,
+            "comments" : serialize('json', post.comments.all())
+        }
+    return json.dumps(context)
+
+
 def by_id(request, post_id):
 
     post = get_object_or_404(Post, id=post_id)
@@ -70,3 +98,20 @@ class CreateComment(CreateView):
 
     def get_success_url(self):
         return reverse("comments", kwargs={'sub_url': self.kwargs['sub_url'], 'post_id': self.kwargs['post_id']})
+
+
+@jsonrpc_method('comments.api_leave_comment', authenticated=True)
+def api_leave_comment(request, **kwargs):
+
+    form = LeaveCommentApiForm(kwargs)
+    if not form.is_valid():
+        raise ValueError('Form is not valid')
+    comment = Comment()
+    comment.author = User.objects.get(pk=1)
+    comment.text = form.cleaned_data['text']
+    subreddit = Subreddit.objects.prefetch_related('feed').get(url=form.cleaned_data['subreddit_url'])
+    post = subreddit.feed.get(title=form.cleaned_data['post_title'])
+    comment.post = post
+    comment.save()
+    return "Your comment in post {} subreddit /r/{} has been successfully submitted"\
+        .format(form.cleaned_data['post_title'], form.cleaned_data['subreddit_url'])
