@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -93,8 +94,16 @@ DATABASES = {
         'USER': 'dumbuser',
         'PASSWORD': 'dumbpassword',
         'HOST': 'localhost',
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
+
+TESTING = 'test' in sys.argv
+if TESTING:
+    DATABASES['default'] = { 'ENGINE' : 'django.db.backends.sqlite3' }
+# DATABASES = {}
+# DATABASES['default'] = { 'ENGINE' : 'django.db.backends.sqlite3',
+#                          'NAME' : 'dumbproject_db'}
 
 
 CACHES = {

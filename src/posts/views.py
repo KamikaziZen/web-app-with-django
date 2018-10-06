@@ -11,7 +11,6 @@ from django.db import models
 from jsonrpc import jsonrpc_method
 from core.models import User
 
-
 class PostEdit(UpdateView):
 
     model = Post

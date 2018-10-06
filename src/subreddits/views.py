@@ -89,8 +89,7 @@ def subreddits_list(request):
 
 @jsonrpc_method('subreddits.api_subreddits_list', authenticated=True)
 def api_subreddits_list(request):
-
-    print (request.user)
+    # print (request.user)
     return serialize('json', Subreddit.objects.all())
 
 
@@ -115,6 +114,7 @@ def api_subreddit(request, **kwargs):
     sub_url = kwargs.get('url', None)
     if sub_url:
         subreddit = get_object_or_404(Subreddit, url=sub_url)
+        # subreddit = Subreddit.objects.get(url=sub_url)
         feed = subreddit.feed.all()
         subscribers = subreddit.subscribers.all()
 

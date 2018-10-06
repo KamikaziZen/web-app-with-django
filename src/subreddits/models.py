@@ -9,7 +9,7 @@ class Subreddit(models.Model):
 
 
     def __str__(self):
-        return '{}: {}'.format(self.get_absolute_url(), self.name)
+        return '{}: {}\nAbout: {}'.format(self.get_absolute_url(), self.name, self.about)
 
     def get_absolute_url(self):
         return reverse("subreddit", kwargs={'sub_url' : self.url})[1:]

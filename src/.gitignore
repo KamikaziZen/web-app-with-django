@@ -2,3 +2,7 @@
 !*/migrations/__init__.py
 */migrations/*.pyc
 **/__pycache__
+Pipfile*
+.coverage
+db.sqplite3
+dumbproject_db

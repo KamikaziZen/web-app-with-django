@@ -55,15 +55,13 @@ def api_show_comments(request, **kwargs):
     subreddit = Subreddit.objects.get(url=sub_url)
     if not subreddit:
         raise ValueError("There is no subreddit with such url")
-    posts = Post.objects.filter(subreddit=subreddit, title=title).prefetch_related('comments')
-    context = {}
-    for idx, post in enumerate(posts):
-        context[idx] = {
-            "title" : post.title,
-            "text" : post.text,
-            "author" : post.author.username,
-            "comments" : serialize('json', post.comments.all())
-        }
+    post = Post.objects.prefetch_related('comments').get(subreddit=subreddit, title=title)
+    context = {
+                    "title" : post.title,
+                    "text" : post.text,
+                    "author" : post.author.username,
+                    "comments" : serialize('json', post.comments.all())
+                }
     return json.dumps(context)
 
 
